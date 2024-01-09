@@ -1,2 +1,2 @@
 # Демонстрация работы доступна в видео по пути:
-\Recordings\movie_001.mp4
+\Recordings\movie_002.mp4

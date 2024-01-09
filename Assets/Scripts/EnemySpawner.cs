@@ -6,12 +6,23 @@ public class EnemySpawner : MonoBehaviour
 {
     [SerializeField] private float _spawnTime = 2f;
     [SerializeField] private Enemy _enemyPrefab;
+    [SerializeField] private Transform _point;
+    [SerializeField] private Vector3 _target = new Vector3(15, 0, 15);
 
     private Transform[] _spawnPoints;
 
+    private void Awake()
+    {
+        _spawnPoints = new Transform[_point.childCount];
+
+        for (int i = 0; i < _spawnPoints.Length; i++)
+        {
+            _spawnPoints[i] = _point.GetChild(i);
+        }
+    }
+
     private void Start()
     {
-        _spawnPoints = GetComponentsInChildren<Transform>();
         StartCoroutine(Spawner());
     }
 
@@ -24,7 +35,9 @@ public class EnemySpawner : MonoBehaviour
             var randomPoint = Random.Range(1, _spawnPoints.Length);
             var randomAngle = Random.Range(0, 360);
 
-            Instantiate(_enemyPrefab, _spawnPoints[randomPoint].transform.position, Quaternion.AngleAxis(randomAngle, Vector3.up));
+            var enemy = Instantiate(_enemyPrefab, _spawnPoints[randomPoint].transform.position, Quaternion.identity);
+
+            enemy.Move(_target);
 
             yield return waitFewSeconds;
         }
